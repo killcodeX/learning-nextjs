@@ -8,6 +8,7 @@ export default function Home() {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [message, setMessage] = useState<string>("You are not logged in");
+  const [secretMessage, setSecretMessage] = useState<string>("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,8 +19,8 @@ export default function Home() {
         method: "POST",
         body: JSON.stringify({ username, password }),
         headers: {
-          'Content-Type':'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       }).then((res) => res.json());
 
       let res = data.token;
@@ -32,6 +33,20 @@ export default function Home() {
             json.admin ? "an admin" : "not admin"
           }`
         );
+
+        const data = await fetch("/api/secret", {
+          method: "POST",
+          body: JSON.stringify({ token : res }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((res) => res.json());
+
+        if(data.secretAdminCode){
+          setSecretMessage(data.secretAdminCode)
+        }else{
+          setSecretMessage('Not Availabel')
+        }
       } else {
         setMessage("Something went wrong");
       }
@@ -41,6 +56,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <h1>{message}</h1>
+      <h2>{secretMessage}</h2>
       <div className={`${styles.card} ${styles.grid}`}>
         <h1>Login</h1>
         <form onSubmit={handleSubmit}>
