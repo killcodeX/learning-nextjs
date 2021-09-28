@@ -1,12 +1,18 @@
 import App from "next/app";
 import Head from "next/head";
-import '../styles/globals.css';
+import "../styles/globals.css";
 import { createContext } from "react";
 import { getStrapiMedia } from "../lib/media";
 import { fetchAPI } from "../lib/api";
 
 // Store Strapi Global object in context
-export const GlobalContext = createContext({});
+export const GlobalContext = createContext({
+  siteName: "DevcryptBlog",
+  defaultSeo: {
+    name: "devcrypt",
+    site: "blog",
+  },
+});
 
 const MyApp = ({ Component, pageProps }) => {
   const { global } = pageProps;
@@ -48,7 +54,6 @@ MyApp.getInitialProps = async (ctx) => {
 };
 
 export default MyApp;
-
 
 // responsible for rendering all of the page
 
